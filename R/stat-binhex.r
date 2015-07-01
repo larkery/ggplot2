@@ -24,11 +24,6 @@
 #' # Or by specifying the width of the bins
 #' d + stat_binhex(binwidth = c(1, 1000))
 #' d + stat_binhex(binwidth = c(.1, 500))
-#'
-#' # With qplot
-#' qplot(x, y, data = diamonds, geom="hex", xlim = c(4, 10), ylim = c(4, 10))
-#' qplot(x, y, data = diamonds, geom="hex", xlim = c(4, 10), ylim = c(4, 10),
-#'   binwidth = c(0.1, 0.1))
 #' }
 stat_binhex <- function (mapping = NULL, data = NULL, geom = "hex", position = "identity",
 bins = 30, na.rm = FALSE, ...) {
@@ -86,7 +81,7 @@ hexBin <- function(x, y, weight, binwidth) {
   ybins <- diff(ybnds) / binwidth[2]
 
   # Call hexbin
-  hb <- hexbin(
+  hb <- hexbin::hexbin(
     x, xbnds = xbnds, xbins = xbins,
     y, ybnds = ybnds, shape = ybins / xbins,
     IDs = !is.null(weight),
@@ -110,7 +105,7 @@ hexBin <- function(x, y, weight, binwidth) {
 
   # Convert to data frame
   data.frame(
-    hcell2xy(hb),
+    hexbin::hcell2xy(hb),
     count = count,
     density = count / sum(count, na.rm=TRUE)
   )
