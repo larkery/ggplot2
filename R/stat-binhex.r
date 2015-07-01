@@ -97,14 +97,13 @@ hexBin <- function(x, y, weight, binwidth) {
       ## ID of the cell for each input point and hb@cell contains the vector of cell IDs
       ## which relate to values in hb@count.
       
-      ## consequently we can put cID next to weight, and then sum them grouped by cID to get
-      ## total weight for each bin
-      sumWeights <- data.frame(cellID = hb@cID, weight=weight)
-      sumWeights <- aggregate(. ~ cellID, data=sumWeights, FUN=sum)
+      ## first we want to sum the weight in each cID
+      sumWeights <- tapply(weight, hb@cID, sum)
       
-      ## finally we want to join the weights back onto the "compressed" list of cells
-      ## hb@cell contains the indices that have actually been used, in the order they occur.
-      count <- sumWeights[match(hb@cell, sumWeights$cellID), c('weight')]
+      ## finally we want to join the weights back onto the "compressed" list of cells, because
+      ## some cells do not get produced (they have nothing in them)
+      ## hb@cell contains the indices that have actually been used, in the order they occur
+      count <- sumWeights[match(hb@cell, names(sumWeights)]
   } else {
       count <- hb@count
   }
