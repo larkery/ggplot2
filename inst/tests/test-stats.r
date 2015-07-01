@@ -132,3 +132,37 @@ test_that("stat-density2d", {
   expect_true(max(ret$y) > 35)
 
 })
+
+
+context("stat-binhex")
+
+test_that("stat-binhex", {
+    ## If we generate points on the centre of hexagons tiling the plane, and then we 
+    ## ask to hexbin them with that many hexagons, we would expect to see one hexagon for each
+    ## point with a weight of 1.
+
+    ## the centre of hexagons is what you get if you tile the plane with equilateral triangles, like so:
+    
+    ys <- 1:10 * cos(30 * pi / 180)
+    xs <- 1:10
+    grid <- expand.grid(y = ys, x = xs)
+    grid$x[c(TRUE, FALSE)] <- grid$x[c(TRUE, FALSE)] + 0.5
+
+    ## it works:
+    ## qplot(x, y, data=grid) + coord_fixed() + geom_hex(bins=100, binwidth=c(1,1)) + geom_point()
+    
+    ## Now the bit I don't understand
+
+    full_scales <- list(x = scale_x_continuous(limits=c(0,10)),
+                       y = scale_y_continuous(limits=c(0,10)))
+
+    ret <- test_stat_scale(stat_hexbin(aes(x=x, y=y, binwidth=c(1,1)), data = grid), full_scales)
+
+    ## assuming this did what I think it did, we should get back a frame which contains
+    ## x, y, count, density
+    ## for this input, we should have got back the corner of all the hexagons, and 1 for all the counts
+
+    ## next do the test again, except with weights
+
+    
+})

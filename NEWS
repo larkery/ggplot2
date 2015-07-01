@@ -1,5 +1,6 @@
 ggplot2 1.0.1.9000
 ----------------------------------------------------------------
+* `geom_hex` now supports weighted data, with `weight=x`.
 
 * Fixed segment annotations not transforming with scales (@BrianDiggs, #859)
 
